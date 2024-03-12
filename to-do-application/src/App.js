@@ -9,13 +9,13 @@ function App() {
     <div className="main">
       <NewTask tasks={tasks} setTasks={setTasks} />
       <div className="taskGrid">
-        <DisplayTask tasks={tasks} />
+        <DisplayTask tasks={tasks} setTasks={setTasks} />
       </div>
     </div>
   );
 }
 
-const DisplayTask = ({ tasks }) => {
+const DisplayTask = ({ tasks, setTasks }) => {
   return tasks.map((task) => {
     return (
       <TaskCard
@@ -25,6 +25,8 @@ const DisplayTask = ({ tasks }) => {
         priority={task.priority}
         assigned={task.assigned}
         key={task.id}
+        tasks={tasks}
+        setTasks={setTasks}
       />
     );
   });
