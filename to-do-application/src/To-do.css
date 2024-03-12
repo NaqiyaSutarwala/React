@@ -1,0 +1,30 @@
+.main {
+  padding: 20px;
+  background-color: rgb(226, 255, 255);
+  min-height: 100vh;
+}
+
+.margin {
+  margin-right: 20px;
+}
+
+.textArea-width {
+  width: 100%;
+  margin-top: 10px;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.dropDown {
+  float: right;
+  width: 200px;
+}
+
+.taskGrid {
+  display: grid;
+  grid-template-columns: auto auto auto auto;
+  grid-gap: 20px;
+}
+
+.tryBorder {
+  border: 2px solid black;
+}
