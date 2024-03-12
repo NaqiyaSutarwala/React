@@ -16,6 +16,7 @@ import FormControl from "@mui/material/FormControl";
 import { useState } from "react";
 import { AssignmentDropDown } from "./NewToDoForm";
 import FileDownloadDoneIcon from "@mui/icons-material/FileDownloadDone";
+import { TextareaAutosize } from "@mui/material";
 
 export default function TaskCard({
   title,
@@ -28,8 +29,9 @@ export default function TaskCard({
 }) {
   const [taskStatus, setTaskStatus] = useState("Pending");
   const [edit, setEdit] = useState(false);
-  const [assignedTo, setAssigned] = useState("");
-  const [priorityValue, setPriorityValue] = useState("");
+  const [assignedTo, setAssigned] = useState(assigned);
+  const [priorityValue, setPriorityValue] = useState(priority);
+  const [border, setBorder] = useState(true);
 
   let perTask = {
     title,
@@ -51,8 +53,8 @@ export default function TaskCard({
   }
   return (
     <Card
-      sx={{ maxWidth: 345, backgroundColor: bgColor }}
-      style={{ marginTop: "20px", position: "relative" }}
+      sx={{ backgroundColor: bgColor }}
+      style={{ marginTop: "20px", position: "relative", maxWidth: "400px" }}
     >
       <CardHeader
         title={
@@ -79,7 +81,8 @@ export default function TaskCard({
       <StatusDropDown taskStatus={taskStatus} setTaskStatus={setTaskStatus} />
       <CardContent>
         {edit ? (
-          <TextField
+          <TextareaAutosize
+            style={{ maxWidth: "500px", wordWrap: "break-word" }}
             id="standard-basic"
             variant="standard"
             value={perTaskEdit.description}
@@ -101,17 +104,20 @@ export default function TaskCard({
             <PriorityChip
               priority={"High"}
               setPriorityValue={setPriorityValue}
+              border={priorityValue === "High" && border}
             />
             <SpanForMarginRight />
             <PriorityChip
               priority={"Medium"}
               setPriorityValue={setPriorityValue}
+              border={priorityValue === "Medium" && border}
             />
             <SpanForMarginRight />
             <PriorityChip
               priority={"Low"}
               priorityValue={priorityValue}
               setPriorityValue={setPriorityValue}
+              border={priorityValue === "Low" && border}
             />
           </>
         ) : (
@@ -183,7 +189,13 @@ const ActionButtons = ({
   };
 
   return (
-    <div style={{ float: "right", position: "absolute", right: "10px" }}>
+    <div
+      style={{
+        float: "right",
+        position: "absolute",
+        right: "10px",
+      }}
+    >
       <IconButton aria-label="Edit button" onClick={handleClick}>
         {edit ? <FileDownloadDoneIcon /> : <EditIcon />}
       </IconButton>

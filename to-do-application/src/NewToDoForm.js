@@ -40,10 +40,13 @@ const NewToDoForm = ({ tasks, setTasks, handleClose, open }) => {
     handleClose();
   };
 
+  const [border, setBorder] = useState(true);
+
   return (
     <Dialog
       open={open}
       onClose={handleClose}
+      fullWidth={true}
       PaperProps={{
         component: "form",
         onSubmit: (event) => {
@@ -77,16 +80,25 @@ const NewToDoForm = ({ tasks, setTasks, handleClose, open }) => {
         />
         <div style={{ margin: "10px" }}></div>
 
-        <PriorityChip priority={"High"} setPriorityValue={setPriorityValue} />
+        <PriorityChip
+          priority={"High"}
+          setPriorityValue={setPriorityValue}
+          border={priorityValue === "High" && border}
+        />
         <SpanForMarginRight />
 
-        <PriorityChip priority={"Medium"} setPriorityValue={setPriorityValue} />
+        <PriorityChip
+          priority={"Medium"}
+          setPriorityValue={setPriorityValue}
+          border={priorityValue === "Medium" && border}
+        />
         <SpanForMarginRight />
 
         <PriorityChip
           priority={"Low"}
           priorityValue={priorityValue}
           setPriorityValue={setPriorityValue}
+          border={priorityValue === "Low" && border}
         />
 
         <AssignmentDropDown
@@ -104,32 +116,51 @@ const NewToDoForm = ({ tasks, setTasks, handleClose, open }) => {
   );
 };
 
-export const AssignmentDropDown = ({ assigned, setAssigned, className }) => {
+export const AssignmentDropDown = ({ assigned, setAssigned }) => {
   return (
-    <FormControl className={className}>
-      <InputLabel id="demo-simple-select-label">Assign Task</InputLabel>
+    <FormControl
+      sx={{
+        m: 1,
+        minWidth: 80,
+        float: "right",
+      }}
+    >
+      <InputLabel id="demo-simple-select-autowidth-label">
+        Assign Task
+      </InputLabel>
       <Select
         onChange={(e) => {
           setAssigned(e.target.value);
         }}
+        sx={{ minWidth: "200px" }}
         value={assigned}
-        labelId="demo-simple-select-label"
-        id="demo-simple-select"
+        labelId="demo-simple-select-autowidth-label"
+        id="demo-simple-select-autowidth"
         label="Assign Task"
-        style={{
-          height: "40px",
-        }}
+        autoWidth
       >
-        <MenuItem value="NS">
-          <ProfileAvatar>NS</ProfileAvatar>
-          <SpanForMarginRight />
-          Naqiya Sutarwala
+        <MenuItem value="MS">
+          <tr>
+            <td>
+              <ProfileAvatar>MS</ProfileAvatar>
+            </td>
+            <td>
+              <SpanForMarginRight></SpanForMarginRight>
+            </td>
+            <td>Mohammed Shethwala</td>
+          </tr>
         </MenuItem>
 
-        <MenuItem value="MS">
-          <ProfileAvatar>MS</ProfileAvatar>
-          <SpanForMarginRight />
-          Mohammed Shethwala
+        <MenuItem value="NS">
+          <tr>
+            <td>
+              <ProfileAvatar>NS</ProfileAvatar>
+            </td>
+            <td>
+              <SpanForMarginRight></SpanForMarginRight>
+            </td>
+            <td>Naqiya Sutarwala</td>
+          </tr>
         </MenuItem>
       </Select>
     </FormControl>
