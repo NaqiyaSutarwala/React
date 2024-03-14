@@ -24,6 +24,10 @@ export default function TaskCard({
   id,
   setTasks,
   tasks,
+  newDate,
+  newTime,
+  updatedTime,
+  updatedDate,
 }) {
   const [taskStatus, setTaskStatus] = useState("Pending");
 
@@ -76,13 +80,42 @@ export default function TaskCard({
       </CardContent>
       <CardActions disableSpacing>
         <PriorityChip priority={priority} />
-
         <SpanForMarginRight />
-
         <ProfileAvatar>{assigned}</ProfileAvatar>
-
         <ActionButtons perTask={perTask} setTasks={setTasks} tasks={tasks} />
       </CardActions>
+      <div
+        style={{
+          display: "flex",
+          fontSize: "13px",
+          justifyContent: "space-between",
+        }}
+      >
+        <div>
+          <span style={{ marginLeft: "10px", fontWeight: "bold" }}>
+            Created Time: {newTime.toUpperCase()}
+          </span>{" "}
+          <br />
+          <span style={{ marginLeft: "10px", fontWeight: "bold" }}>
+            Created Date: {newDate}
+          </span>
+          <div style={{ margin: "10px" }}></div>
+        </div>
+        {updatedDate ? (
+          <div>
+            <span style={{ marginRight: "10px", fontWeight: "bold" }}>
+              Updated Time: {updatedTime.toUpperCase()}
+            </span>
+            <br />
+            <span style={{ marginLeft: "10px", fontWeight: "bold" }}>
+              Updated Date: {updatedDate}
+            </span>
+            <div style={{ margin: "10px" }}></div>
+          </div>
+        ) : (
+          ""
+        )}
+      </div>
     </Card>
   );
 }

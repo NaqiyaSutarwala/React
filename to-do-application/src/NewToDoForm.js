@@ -43,6 +43,8 @@ const NewToDoForm = ({ perTask, setTasks, handleClose, open }) => {
               ...updateTask,
               priority: priorityValue,
               assigned: assigned,
+              updatedDate: new Date().toLocaleDateString(),
+              updatedTime: new Date().toLocaleTimeString(),
             };
           } else {
             return task;
@@ -58,6 +60,7 @@ const NewToDoForm = ({ perTask, setTasks, handleClose, open }) => {
       formJson.taskStatus = "Pending";
 
       formJson.id = `task/${1}`;
+      console.log(new Date().toLocaleTimeString());
 
       setTasks((task) => {
         return [
@@ -65,6 +68,9 @@ const NewToDoForm = ({ perTask, setTasks, handleClose, open }) => {
           {
             ...formJson,
             id: task.length > 0 ? `task/${task.length + 1}` : `task/1`,
+            newDate: new Date().toLocaleDateString(),
+            newTime: new Date().toLocaleTimeString(),
+            // timeStamp:
           },
         ];
       });
