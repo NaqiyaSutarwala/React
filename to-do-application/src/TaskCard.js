@@ -9,14 +9,12 @@ import EditIcon from "@mui/icons-material/Edit";
 import ProfileAvatar from "./ProfileAvatar";
 import PriorityChip from "./PriorityChip";
 import { SpanForMarginRight } from "./NewTask";
-import { Select, TextField } from "@mui/material";
+import { Select } from "@mui/material";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import { useState } from "react";
-import { AssignmentDropDown } from "./NewToDoForm";
-import FileDownloadDoneIcon from "@mui/icons-material/FileDownloadDone";
-import { TextareaAutosize } from "@mui/material";
+import NewToDoForm from "./NewToDoForm";
 
 export default function TaskCard({
   title,
@@ -28,10 +26,6 @@ export default function TaskCard({
   tasks,
 }) {
   const [taskStatus, setTaskStatus] = useState("Pending");
-  const [edit, setEdit] = useState(false);
-  const [assignedTo, setAssigned] = useState(assigned);
-  const [priorityValue, setPriorityValue] = useState(priority);
-  const [border, setBorder] = useState(true);
 
   let perTask = {
     title,
@@ -39,9 +33,9 @@ export default function TaskCard({
     priority,
     assigned,
     id,
+    taskStatus,
   };
 
-  const [perTaskEdit, setPerTaskEdit] = useState(perTask);
   let bgColor;
 
   if (taskStatus === "Pending") {
@@ -58,108 +52,44 @@ export default function TaskCard({
     >
       <CardHeader
         title={
-          edit ? (
-            <TextField
-              id="standard-basic"
-              variant="standard"
-              value={perTaskEdit.title}
-              onChange={(e) => {
-                setPerTaskEdit((perTaskPrev) => {
-                  return { ...perTaskPrev, title: e.target.value };
-                });
-              }}
-            />
-          ) : (
-            <Typography variant="body2" color="text.secondary">
-              {title}
-            </Typography>
-          )
+          <Typography
+            variant="body2"
+            color="text.secondary"
+            sx={{ fontSize: "24px", fontWeight: "bolder", color: "black" }}
+          >
+            {title}
+          </Typography>
         }
         subheader={id}
         style={{ position: "relative" }}
       />
-      <StatusDropDown taskStatus={taskStatus} setTaskStatus={setTaskStatus} />
+      <StatusDropDown
+        taskStatus={taskStatus}
+        setTaskStatus={setTaskStatus}
+        perTask={perTask}
+        setTasks={setTasks}
+      />
       <CardContent>
-        {edit ? (
-          <TextareaAutosize
-            style={{ maxWidth: "500px", wordWrap: "break-word" }}
-            id="standard-basic"
-            variant="standard"
-            value={perTaskEdit.description}
-            onChange={(e) => {
-              setPerTaskEdit((perTaskPrev) => {
-                return { ...perTaskPrev, description: e.target.value };
-              });
-            }}
-          />
-        ) : (
-          <Typography variant="body2" color="text.secondary">
-            {description}
-          </Typography>
-        )}
+        <Typography variant="body2" color="text.secondary">
+          {description}
+        </Typography>
       </CardContent>
       <CardActions disableSpacing>
-        {edit ? (
-          <>
-            <PriorityChip
-              priority={"High"}
-              setPriorityValue={setPriorityValue}
-              border={priorityValue === "High" && border}
-            />
-            <SpanForMarginRight />
-            <PriorityChip
-              priority={"Medium"}
-              setPriorityValue={setPriorityValue}
-              border={priorityValue === "Medium" && border}
-            />
-            <SpanForMarginRight />
-            <PriorityChip
-              priority={"Low"}
-              priorityValue={priorityValue}
-              setPriorityValue={setPriorityValue}
-              border={priorityValue === "Low" && border}
-            />
-          </>
-        ) : (
-          <PriorityChip priority={priority} />
-        )}
+        <PriorityChip priority={priority} />
+
         <SpanForMarginRight />
 
-        {edit ? (
-          <>
-            <AssignmentDropDown
-              assigned={assignedTo}
-              setAssigned={setAssigned}
-              className="dropDown-edit"
-            />
-          </>
-        ) : (
-          <ProfileAvatar>{assigned}</ProfileAvatar>
-        )}
+        <ProfileAvatar>{assigned}</ProfileAvatar>
 
-        <ActionButtons
-          setEdit={setEdit}
-          edit={edit}
-          perTask={perTaskEdit}
-          setTasks={setTasks}
-          tasks={tasks}
-          priority={priorityValue}
-          assigned={assignedTo}
-        />
+        <ActionButtons perTask={perTask} setTasks={setTasks} tasks={tasks} />
       </CardActions>
     </Card>
   );
 }
 
-const ActionButtons = ({
-  setEdit,
-  edit,
-  perTask,
-  setTasks,
-  tasks,
-  priority,
-  assigned,
-}) => {
+const ActionButtons = ({ perTask, setTasks, tasks, taskStatus }) => {
+  const [open, setOpen] = useState(false);
+
   const handleDeleteCurrent = () => {
     const deleted = tasks.filter((item) => {
       return item.id !== perTask.id;
@@ -167,25 +97,12 @@ const ActionButtons = ({
     setTasks(deleted);
   };
 
-  const handleClick = () => {
-    setEdit(true);
+  const handleClose = () => {
+    setOpen(false);
+  };
 
-    if (edit) {
-      setEdit(false);
-      const editedArray = tasks.map((task) => {
-        if (task.id === perTask.id) {
-          return {
-            ...task,
-            ...perTask,
-            priority: priority,
-            assigned: assigned,
-          };
-        } else {
-          return task;
-        }
-      });
-      setTasks(editedArray);
-    }
+  const handleEditing = () => {
+    setOpen(true);
   };
 
   return (
@@ -196,19 +113,56 @@ const ActionButtons = ({
         right: "10px",
       }}
     >
-      <IconButton aria-label="Edit button" onClick={handleClick}>
-        {edit ? <FileDownloadDoneIcon /> : <EditIcon />}
+      <IconButton
+        aria-label="Edit button"
+        onClick={() => {
+          handleEditing();
+        }}
+      >
+        <EditIcon />
       </IconButton>
-      {edit || (
-        <IconButton aria-label="share" onClick={handleDeleteCurrent}>
-          <DeleteIcon />
-        </IconButton>
+      {open ? (
+        <NewToDoForm
+          open={open}
+          perTask={perTask}
+          setTasks={setTasks}
+          handleClose={handleClose}
+        />
+      ) : (
+        ""
       )}
+
+      <IconButton aria-label="share" onClick={handleDeleteCurrent}>
+        <DeleteIcon />
+      </IconButton>
     </div>
   );
 };
 
-const StatusDropDown = ({ taskStatus, setTaskStatus }) => {
+const StatusDropDown = ({ taskStatus, setTaskStatus, perTask, setTasks }) => {
+  const [StatusCurr, setStatusCurr] = useState("Pending");
+
+  const handleChange = (e) => {
+    setStatusCurr(e.target.value);
+    // const StatusCurr = e.target.value;
+
+    setTaskStatus(e.target.value);
+
+    setTasks((tasks) => {
+      return tasks.map((task) => {
+        if (task.id === perTask.id) {
+          return {
+            ...task,
+            ...perTask,
+            taskStatus: StatusCurr,
+          };
+        } else {
+          return task;
+        }
+      });
+    });
+  };
+
   return (
     <FormControl
       sx={{ m: 1, minWidth: 120 }}
@@ -222,7 +176,7 @@ const StatusDropDown = ({ taskStatus, setTaskStatus }) => {
         label="Status"
         value={taskStatus}
         onChange={(e) => {
-          setTaskStatus(e.target.value);
+          handleChange(e);
         }}
       >
         <MenuItem value={"Pending"}>Pending</MenuItem>

@@ -15,32 +15,73 @@ import ProfileAvatar from "./ProfileAvatar";
 import PriorityChip from "./PriorityChip";
 import { useState } from "react";
 
-const NewToDoForm = ({ tasks, setTasks, handleClose, open }) => {
-  const [priorityValue, setPriorityValue] = useState("");
-  const [assigned, setAssigned] = useState("");
+const NewToDoForm = ({ perTask, setTasks, handleClose, open }) => {
+  const obj = {
+    title: "",
+    description: "",
+    priority: "",
+    assigned: "",
+    id: "",
+    taskStatus: "Pending",
+  };
+
+  const [assigned, setAssigned] = useState(perTask ? perTask.assigned : "");
+  const [updateTask, setUpdateTask] = useState(perTask);
+  const [createTask, setCreateTask] = useState(obj);
+  const [priorityValue, setPriorityValue] = useState(
+    perTask ? perTask.priority : ""
+  );
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    const formData = new FormData(event.currentTarget);
-    const formJson = Object.fromEntries(formData.entries());
-    formJson.priority = priorityValue;
-    formJson.assigned = assigned;
-    formJson.id = `task/${1}`;
+    if (perTask) {
+      setTasks((tasks) => {
+        return tasks.map((task) => {
+          if (task.id === updateTask.id) {
+            return {
+              ...task,
+              ...updateTask,
+              priority: priorityValue,
+              assigned: assigned,
+            };
+          } else {
+            return task;
+          }
+        });
+      });
+      handleClose();
+    } else {
+      const formData = new FormData(event.currentTarget);
+      const formJson = Object.fromEntries(formData.entries());
+      formJson.priority = priorityValue;
+      formJson.assigned = assigned;
+      formJson.taskStatus = "Pending";
 
-    console.log(formJson);
-    setTasks((task) => {
-      return [
-        ...task,
-        {
-          ...formJson,
-          id: task.length > 0 ? `task/${task.length + 1}` : `task/1`,
-        },
-      ];
-    });
-    handleClose();
+      formJson.id = `task/${1}`;
+
+      setTasks((task) => {
+        return [
+          ...task,
+          {
+            ...formJson,
+            id: task.length > 0 ? `task/${task.length + 1}` : `task/1`,
+          },
+        ];
+      });
+      setCreateTask({
+        title: "",
+        description: "",
+        priority: "",
+        assigned: "",
+        id: "",
+      });
+      setPriorityValue("");
+      setAssigned("");
+      handleClose();
+    }
   };
 
-  const [border, setBorder] = useState(true);
+  const [border] = useState(true);
 
   return (
     <Dialog
@@ -66,6 +107,16 @@ const NewToDoForm = ({ tasks, setTasks, handleClose, open }) => {
           type="text"
           fullWidth
           variant="standard"
+          value={perTask ? updateTask?.title : createTask?.title}
+          onChange={(e) => {
+            perTask
+              ? setUpdateTask((taskUpdate) => {
+                  return { ...taskUpdate, title: e.target.value };
+                })
+              : setCreateTask((task) => {
+                  return { ...task, title: e.target.value };
+                });
+          }}
         />
         <span className="margin"> </span>
 
@@ -77,6 +128,16 @@ const NewToDoForm = ({ tasks, setTasks, handleClose, open }) => {
           aria-label="minimum height"
           minRows={4}
           placeholder="Enter Task"
+          value={perTask ? updateTask?.description : createTask?.description}
+          onChange={(e) => {
+            perTask
+              ? setUpdateTask((taskUpdate) => {
+                  return { ...taskUpdate, description: e.target.value };
+                })
+              : setCreateTask((task) => {
+                  return { ...task, description: e.target.value };
+                });
+          }}
         />
         <div style={{ margin: "10px" }}></div>
 
@@ -110,7 +171,11 @@ const NewToDoForm = ({ tasks, setTasks, handleClose, open }) => {
 
       <DialogActions>
         <Button onClick={handleClose}>Cancel</Button>
-        <Button type="submit">Okay</Button>
+        {perTask ? (
+          <Button type="submit">Update</Button>
+        ) : (
+          <Button type="submit">Create</Button>
+        )}
       </DialogActions>
     </Dialog>
   );

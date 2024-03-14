@@ -5,9 +5,21 @@ import FormControl from "@mui/material/FormControl";
 import ListItemText from "@mui/material/ListItemText";
 import Select from "@mui/material/Select";
 import Checkbox from "@mui/material/Checkbox";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
-const Filter = ({ criteriaFilter, setCriteriaFilter, handleFiltering }) => {
+const Filter = ({
+  criteriaFilter,
+  setCriteriaFilter,
+  setFilteredTask,
+  filteredTask,
+  tasks,
+  filteredArray,
+  setFilteredArray,
+  isFiltered, 
+  setIsFiltered,
+  handleFiltering,
+  handleChange
+}) => {
   const ITEM_HEIGHT = 48;
   const ITEM_PADDING_TOP = 8;
   const MenuProps = {
@@ -22,21 +34,37 @@ const Filter = ({ criteriaFilter, setCriteriaFilter, handleFiltering }) => {
   const criteria = [
     "Completed",
     "Pending",
-    "Not Started",
-    "High Priority",
-    "Low Priority",
-    "Medium Priority",
-    "Naqiya Sutarwala",
-    "Mohammed Shethwala",
+    "Process",
+    "High",
+    "Low",
+    "Medium",
+    "MS",
+    "NS",
   ];
 
-  const handleChange = (event) => {
-    const {
-      target: { value },
-    } = event;
-    setCriteriaFilter(typeof value === "string" ? value.split(",") : value);
-  };
+  // const previousValueRef = useRef(criteriaFilter);
+  
 
+  // const handleChange = (event) => {
+  //   const {
+  //     target: { value },
+  //   } = event;
+
+  //   const previousValue = criteriaFilter;
+
+  //   const temp = typeof value === "string" ? value.split(",") : value;
+
+  //   setCriteriaFilter(temp);
+  //   handleFiltering(temp, previousValue);
+  // };
+  //////////////////////////////////////////
+  // useEffect(() => {
+  //   const previousValue = previousValueRef.current;
+  //   const temp = criteriaFilter;
+  //   handleFiltering(temp, previousValue);
+  //   previousValueRef.current = criteriaFilter;
+  // }, [criteriaFilter, tasks]);
+  ///////////////////////////////////////////
 
   return (
     <div>
@@ -47,7 +75,9 @@ const Filter = ({ criteriaFilter, setCriteriaFilter, handleFiltering }) => {
           id="demo-multiple-checkbox"
           multiple
           value={criteriaFilter}
-          onChange={handleChange}
+          onChange={(e) => {
+            handleChange(e);
+          }}
           input={<OutlinedInput label="Tag" />}
           renderValue={(selected) => selected.join(", ")}
           MenuProps={MenuProps}
