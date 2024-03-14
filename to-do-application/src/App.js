@@ -169,6 +169,10 @@ export const DisplayTask = ({ tasks, setTasks, search, filter }) => {
         description={task.description}
         priority={task.priority}
         assigned={task.assigned}
+        newDate={task.newDate}
+        newTime={task.newTime}
+        updatedTime={task.updatedTime}
+        updatedDate={task.updatedDate}
         key={task.id}
         tasks={searchData}
         setTasks={setTasks}
