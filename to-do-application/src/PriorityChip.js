@@ -1,8 +1,11 @@
 import Chip from "@mui/material/Chip";
 
 import "./To-do.css";
+import { useState } from "react";
 
-const PriorityChip = ({ priority, setPriorityValue }) => {
+const PriorityChip = ({ priority, setPriorityValue, border }) => {
+  // const [drawBorder, setDrawBorder] = useState(border);
+
   let BgColor;
   if (priority === "High") {
     BgColor = "primary";
@@ -13,11 +16,16 @@ const PriorityChip = ({ priority, setPriorityValue }) => {
   }
   return (
     <Chip
+      sx={
+        border
+          ? { border: "2px", borderColor: "black", borderStyle: "solid" }
+          : ""
+      }
       label={priority}
       variant="filled"
       color={BgColor}
       id={priority}
-      onClick={() => {
+      onClick={(e) => {
         setPriorityValue(priority);
       }}
     />
