@@ -5,7 +5,7 @@ import FormControl from "@mui/material/FormControl";
 import ListItemText from "@mui/material/ListItemText";
 import Select from "@mui/material/Select";
 import Checkbox from "@mui/material/Checkbox";
-import { useEffect, useRef, useState } from "react";
+
 
 const Filter = ({
   criteriaFilter,
@@ -41,30 +41,6 @@ const Filter = ({
     "MS",
     "NS",
   ];
-
-  // const previousValueRef = useRef(criteriaFilter);
-  
-
-  // const handleChange = (event) => {
-  //   const {
-  //     target: { value },
-  //   } = event;
-
-  //   const previousValue = criteriaFilter;
-
-  //   const temp = typeof value === "string" ? value.split(",") : value;
-
-  //   setCriteriaFilter(temp);
-  //   handleFiltering(temp, previousValue);
-  // };
-  //////////////////////////////////////////
-  // useEffect(() => {
-  //   const previousValue = previousValueRef.current;
-  //   const temp = criteriaFilter;
-  //   handleFiltering(temp, previousValue);
-  //   previousValueRef.current = criteriaFilter;
-  // }, [criteriaFilter, tasks]);
-  ///////////////////////////////////////////
 
   return (
     <div>

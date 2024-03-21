@@ -1,7 +1,7 @@
 import NewTask from "./NewTask";
 import "./To-do.css";
 import TaskCard from "./TaskCard";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Search from "./Search";
 import Filter from "./filter";
 
@@ -26,23 +26,6 @@ function App() {
     handleFiltering(temp, previousValue);
   };
 
-  // useEffect(() => {
-  //   // console.log(tas);
-  //   <Filter
-  //     handleFiltering={handleFiltering}
-  //     filteredArray={filteredArray}
-  //     setFilteredArray={setFilteredArray}
-  //     isFiltered={isFiltered}
-  //     setIsFiltered={setIsFiltered}
-  //     criteriaFilter={criteriaFilter}
-  //     setCriteriaFilter={setCriteriaFilter}
-  //     tasks={tasks}
-  //     filteredTask={filteredTask}
-  //     setFilteredTask={setFilteredTask}
-  //     setTasks={setTasks}
-  //     handleChange={handleChange}
-  //   ></Filter>;
-  // }, [tasks]);
 
   const handleFiltering = (temp = [], previousValue) => {
     if (isFiltered) {
