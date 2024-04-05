@@ -1,19 +1,23 @@
 import React from "react";
-import ReactDOM from "react-dom/client";
-import StarRating from "./StarRating";
-import "./index.css";
-import App from "./App";
 
+import ReactDOM from "react-dom/client";
+// import ReactDOM from 'react-dom';
+
+import App from "./App";
+import "./index.css";
+
+// REACT 18
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
     <App />
-    {/* <StarRating
-      messages={["Terrible", "Bad", "Okay", "Good", "Amazing"]}
-      defaultRating={3}
-      onSetRating={{}}
-      maxRating={4}
-    /> */}
   </React.StrictMode>
 );
 
+// REACT 17
+// ReactDOM.render(
+//   <React.StrictMode>
+//     <App />
+//   </React.StrictMode>,
+//   document.getElementById('root')
+// );

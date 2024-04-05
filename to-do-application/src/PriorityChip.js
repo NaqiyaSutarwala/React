@@ -4,7 +4,6 @@ import "./To-do.css";
 import { useState } from "react";
 
 const PriorityChip = ({ priority, setPriorityValue, border }) => {
-  // const [drawBorder, setDrawBorder] = useState(border);
 
   let BgColor;
   if (priority === "High") {
